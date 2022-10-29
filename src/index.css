@@ -1,0 +1,16 @@
+body {
+  font-weight: bold;
+  color: #fefefefe;
+  background: #071934;
+  overflow: hidden;
+  display: block;
+  margin: 0;
+  font-family: 'Press Start 2p';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: 'Press Start 2p',
+    monospace;
+}
