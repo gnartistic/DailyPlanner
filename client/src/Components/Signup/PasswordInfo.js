@@ -3,11 +3,15 @@ import React, { useState } from "react";
 import validator from "validator";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleArrowLeft, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import Auth from '../../utils/auth'
+import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../../utils/mutations';
 
 function PasswordInfo ( { nextStep, handleFormData, prevStep, values } )
 {
     //creating error state for validation
     const [ errorPassword, setErrorPassword ] = useState( false );
+    const [addUser] = useMutation(ADD_USER);
 
     // after form submit validating the form data using validator
     const submitFormData = ( e ) =>
@@ -17,12 +21,25 @@ function PasswordInfo ( { nextStep, handleFormData, prevStep, values } )
         // checking if value of first name and last name is empty show error else take to next step
         if( validator.isEmpty( values.password ) ) {
             setErrorPassword( true );
-        } else {
-            if( validator.isStrongPassword( values.password, [] ) ) {
-                nextStep();
+        } else if( validator.isStrongPassword( values.password, [] ) ) {
+            handleFormSubmit();
+            console.log( values )
+            
             } else {
                 setErrorPassword( true );
             }
+    };
+
+    const handleFormSubmit = async ( event ) =>
+    {
+        try {
+            const { data } = await addUser( {
+                variables: { ...values },
+            } );
+
+            Auth.login( data.addUser.token );
+        } catch( e ) {
+            console.error( e );
         }
     };
 
@@ -43,7 +60,7 @@ function PasswordInfo ( { nextStep, handleFormData, prevStep, values } )
                     />
                     {errorPassword ? (
                         <div>
-                        <p className="errorText" style={{textAlign:'left'}}>Password must contain:<br/>8-12 characters<br/> Atleast 1 uppercase letter (A-Z) <br/>Atleast 1 lowercase letter (a-z)<br/>Atleast 1 symbol ($%&!)</p>
+                            <p className="errorText" style={{ textAlign: 'left' }}>Password must contain:<br />8-12 characters<br /> Atleast 1 uppercase letter (A-Z) <br />Atleast 1 lowercase letter (a-z)<br />Atleast 1 symbol ($%&!)</p>
                         </div>
                     ) : (
                         ""

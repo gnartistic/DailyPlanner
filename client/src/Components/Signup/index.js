@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Loader from 'react-loaders'
 import SignUpInfo from './SignUpInfo'
 import PersonalInfo from './PersonalInfo'
