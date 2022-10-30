@@ -26,7 +26,7 @@ type Query {
     me: User
     users: [User]
     user(username: String!): User
-    task(username: String): [Task]
+    tasks(username: String): [Task]
     task(_id: ID!): Task
 }
 
