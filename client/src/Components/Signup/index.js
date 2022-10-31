@@ -9,6 +9,7 @@ const Signup = () =>
 {
     const [ step, setStep ] = useState( 1 );
     const [ formData, setFormData ] = useState( {
+        username:'',
         firstName: '',
         lastName: '',
         email: '',

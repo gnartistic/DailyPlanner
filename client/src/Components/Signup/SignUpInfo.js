@@ -16,7 +16,7 @@ function SignUpInfo ( { nextStep, handleFormData, prevStep, values } )
         e.preventDefault();
 
         // checking if value of first name and last name is empty show error else take to next step
-        if( validator.isEmpty( values.email ) ) {
+        if( validator.isEmpty( values.email ) || validator.isEmpty( values.username ) ) {
             setError( true );
         } else {
             if( validator.isEmail( values.email ) ) {
@@ -25,15 +25,23 @@ function SignUpInfo ( { nextStep, handleFormData, prevStep, values } )
                 setErrorEmail( true );
             }
         }
+
     };
 
     return (
         <div className="form-container">
             <form className="body" onSubmit={submitFormData}>
                 <div className="header">
-                    <h1>What's your email?</h1>
+                    <h1>Enter a username and email.</h1>
                 </div>
                 <div className="sign-up-container">
+                    <input
+                        type="username"
+                        name="username"
+                        placeholder="Username"
+                        defaultValue={values.username}
+                        onChange={handleFormData( "username" )}
+                    />
                     <input
                         type="email"
                         name="email"
@@ -43,7 +51,7 @@ function SignUpInfo ( { nextStep, handleFormData, prevStep, values } )
                     />
                     {error || errorEmail ? (
                         <p className="errorText">
-                            Please enter a valid email.
+                            Please enter a username and valid email.
                         </p>
                     ) : (
                         ""

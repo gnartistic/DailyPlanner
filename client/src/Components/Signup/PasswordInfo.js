@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 import React, { useState } from "react";
+import {Link} from 'react-router-dom'
 import validator from "validator";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleArrowLeft, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
@@ -11,7 +12,10 @@ function PasswordInfo ( { nextStep, handleFormData, prevStep, values } )
 {
     //creating error state for validation
     const [ errorPassword, setErrorPassword ] = useState( false );
-    const [addUser] = useMutation(ADD_USER);
+    const [ addUser, { error } ] = useMutation( ADD_USER );
+
+    const [ passReqMessage, setPassReqMessage ] = useState( false );
+
 
     // after form submit validating the form data using validator
     const submitFormData = ( e ) =>
@@ -36,8 +40,9 @@ function PasswordInfo ( { nextStep, handleFormData, prevStep, values } )
             const { data } = await addUser( {
                 variables: { ...values },
             } );
-
-            Auth.login( data.addUser.token );
+            
+                Auth.login( data.addUser.token );
+            
         } catch( e ) {
             console.error( e );
         }
@@ -49,22 +54,26 @@ function PasswordInfo ( { nextStep, handleFormData, prevStep, values } )
                 <div className="header">
                     <h1>Enter a password.</h1>
                 </div>
-                <div className="sign-up-container">
+                <div className="other-info-container">
+                    {passReqMessage &&<p className="passwordText">Password must contain 8-12 characters,<br /> minimum of one uppercase character (A-Z),<br />minimum of one lowercase character (a-z), <br />and one non-alphanumeric character ($%&!).</p> }
                     <input
+                        className="password"
                         placeholder="Password"
                         name="password"
                         type="password"
                         id="pwd"
+                        onClick={() => { setPassReqMessage( true ); }}
                         defaultValue={values.password}
                         onChange={handleFormData( "password" )}
                     />
                     {errorPassword ? (
                         <div>
-                            <p className="errorText" style={{ textAlign: 'left' }}>Password must contain:<br />8-12 characters<br /> Atleast 1 uppercase letter (A-Z) <br />Atleast 1 lowercase letter (a-z)<br />Atleast 1 symbol ($%&!)</p>
-                        </div>
+                            <p className="errorText" style={{ bottom:'-20px', position:'relative' }}>Please enter a valid password.</p>
+                            </div>
                     ) : (
                         ""
                     )}
+                    {error && <p className="errorText" style={{textAlign:'center'}}>An account already exists with your chosen username or email.<br/> Please try again or <Link to='/login'>login</Link></p>}
                 </div>
                 <div className="footer">
                     <button className="next" type="submit">
