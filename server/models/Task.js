@@ -18,6 +18,10 @@ const taskSchema = new Schema(
             type: String,
             required: true
         },
+        priority: {
+            type: Boolean,
+            required: true
+        }
     },
     {
         toJSON: {

@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './index.scss'
+import { useMutation } from '@apollo/client';
+import { ADD_TASK } from '../../utils/mutations';
+import { QUERY_TASKS, QUERY_ME } from '../../utils/queries';
 
 const Planner = () =>
 {
     const [ currentDate, setCurrentDate ] = useState( '' );
     const [ currentTime, setCurrentTime ] = useState( '' );
+    const [ currentHour, setCurrentHour ] = useState( '' );
 
     var hour = new Date().getHours(); //Current Hours
 
@@ -17,7 +21,7 @@ const Planner = () =>
         } else if( hour < 1 ) {
             return 'AM'
         } else {
-            return 'PM'
+            return 'AM'
         }
     };
 
@@ -32,30 +36,19 @@ const Planner = () =>
         var min = new Date().getMinutes(); //Current Minutes
         var sec = new Date().getSeconds();
 
-        const formatMilitaryTime = () =>
+        const minutesFormat = () =>
         {
-
-            if( hour > 23 ) { //if over 24 hours reset back to morning
-                if( hour == 24 ) {//if midnight make it 12am
-                    hour = 12;
-                } else { //after midnight is morning so subtract 24
-                    hour -= 24;
-                }
-            } else if( hour > 11 ) { //anything over noon subtract 12 to get back to normal format
-                if( hour == 12 ) { //if 12 make it 12pm
-                    hour = 12;
-                } else { //anything after 12 just subtract 12 to get to normal single digits
-                    hour -= 12;
-                }
-            } else if( hour < 1 ) { //if its below 1 it would be night time
-                if( hour == 0 ) { //0 hour is 12am so set it
-                    hour = 12;
-                } else { //anything else is pm of previous night so add 12 cause negative and add pm
-                    hour += 12;
-                }
+            if( min < 10 ) {
+                return '0' + min;
+            } else if( min == 20 || min == 30 || min == 40 || min == 50 || min == 10 ) {
+                return min;
+            } else {
+                return min;
             }
-
-            return hour
+        }
+        const hours12 = () =>
+        {
+            return ( hour + 24 ) % 12 || 12;
         }
 
         setCurrentDate(
@@ -63,30 +56,93 @@ const Planner = () =>
         );
 
         setCurrentTime(
-            formatMilitaryTime( hour ) + ':' + min + suffix
+            hours12( hour ) + ':' + minutesFormat( min ) + suffix
         )
-    }, [] );
+        setCurrentHour(
+            hours12( hour )
+        )
+    }, [ suffix, currentHour, currentTime ] );
 
-        const dayHours = [ '6:00am', '6:30am', '7:00am', '7:30am', '8:00am', '8:30am', '9:00am', '9:30am', '10:00am', '10:30am', '11:00am', '11:30am', '12:00pm', '12:30pm', '1:00pm', '1:30pm', '2:00pm', '2:30pm', '3:00pm', '3:30pm', '4:00pm', '4:30pm', '5:00pm', '5:30pm', '6:00pm', '6:30pm', '7:00pm', '7:30pm', '8:00pm', '8:30pm' ];
+    const hours = [ { id: 1, hour: '7', min: ':00AM' }, { id: 2, hour: '8', min: ':00AM' }, { id: 3, hour: '9', min: ':00AM' }, { id: 4, hour: '10', min: ':00AM' }, { id: 5, hour: '11', min: ':00AM' }, { id: 6, hour: '12', min: ':00PM' }, { id: 7, hour: '1', min: ':00PM' }, { id: 8, hour: '2', min: ':00PM' }, { id: 9, hour: '3', min: ':00PM' }, { id: 10, hour: '4', min: ':00PM' }, { id: 11, hour: '5', min: ':00PM' }, { id: 12, hour: '6', min: ':00PM' }, { id: 13, hour: '7', min: ':00PM' }, { id: 14, hour: '8', min: ':00PM' } ];
 
-        const timeSlots = dayHours.map( ( hours ) =>
-        
-            <div className='timeSlots'>
-                <h3 className='time'>{hours}</h3>
-                <textarea className='taskEdit' />
-                <button className='saveButton'>Save</button>
-            </div>
-        );
+    const [ taskText, setText ] = useState( '' );
+    const [ characterCount, setCharacterCount ] = useState( 0 );
+
+    const [ addTask, { error } ] = useMutation( ADD_TASK, {
+        update ( cache, { data: { addTask } } )
+        {
+
+            // could potentially not exist yet, so wrap in a try/catch
+            try {
+                // update me array's cache
+                const { me } = cache.readQuery( { query: QUERY_ME } );
+                cache.writeQuery( {
+                    query: QUERY_ME,
+                    data: { me: { ...me, tasks: [ ...me.tasks, addTask ] } },
+                } );
+            } catch( e ) {
+                console.warn( "First task insertion by user!" )
+            }
+
+            // update task array's cache
+            const { tasks } = cache.readQuery( { query: QUERY_TASKS } );
+            cache.writeQuery( {
+                query: QUERY_TASKS,
+                data: { tasks: [ addTask, ...tasks ] },
+            } );
+        }
+    } );
+
+    // update state based on form input changes
+    const handleChange = ( event ) =>
+    {
+        if( event.target.value.length <= 280 ) {
+            setText( event.target.value );
+            setCharacterCount( event.target.value.length );
+        }
+    };
+
+    // submit form
+    const handleFormSubmit = async ( event ) =>
+    {
+        event.preventDefault();
+
+        try {
+            await addTask( {
+                variables: { taskText },
+            } );
+
+            // clear form value
+            setText( '' );
+            setCharacterCount( 0 );
+        } catch( e ) {
+            console.error( e );
+        }
+    };
+
+    const timeSlots = hours.map( ( hours ) =>
+
+        <div key={hours.id}>
+            <form className='timeSlots' onSubmit={handleFormSubmit}>
+                <h3 className='time'>{hours.hour}{hours.min}</h3>
+                <textarea style={{ backgroundColor: hours.hour == currentHour ? '#37537d' : '#1f3047' }} className='taskEdit'
+                    placeholder="Nothing to do..."
+                    value={taskText}
+                    onChange={handleChange} />
+                <button className='saveButton' type="submit">Save</button>
+            </form>
+        </div>
+    );
 
     return (
         <>
             <div className='planner'>
-            <h1 className='date'>{currentDate}</h1>
-            <h2 className='currTime'>{currentTime}</h2>
-            <div className='timeSlotContainer'>
-                {timeSlots}
-            </div>
-        </div >
+                <h1 className='date'>{currentDate}</h1>
+                <h2 className='currTime'>{currentTime}</h2>
+                <div className='timeSlotContainer'>
+                    {timeSlots}
+                </div>
+            </div >
         </>
     )
 }

@@ -12,6 +12,7 @@ const Main = () =>
     const tasks = data?.tasks || [];
 
     const loggedIn = Auth.loggedIn();
+    const sessionExpired = Auth.isTokenExpired();
 
     return (
         <>

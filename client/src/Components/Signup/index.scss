@@ -18,14 +18,16 @@
             font-weight: bold;
         }
     }
+
     .passwordText {
         font-family: Arial, Helvetica, sans-serif;
         color: #fefefe;
         font-size: 12px;
         position: fixed;
         animation: fadeInDown 1.2s forwards;
-        top: 200px;
+        top: 300px;
     }
+
     .password {
         position: relative;
     }
@@ -223,6 +225,26 @@ input:focus {
 
     .footer {
         padding-top: 60px;
+    }
+
+    .form {
+
+        .errorText {
+            font-family: Arial, Helvetica, sans-serif;
+            color: rgb(198, 33, 33);
+            font-size: 12px;
+            animation: headShake .5s forwards;
+            line-height: 1.5vw;
+
+            a {
+                color: #fefefe;
+                font-weight: bold;
+            }
+        }
+
+        .passwordText {
+            top: 200px;
+        }
     }
 
     .confirm {

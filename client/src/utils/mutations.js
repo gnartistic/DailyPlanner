@@ -30,12 +30,21 @@ mutation addUser($username: String!, $firstName: String!, $lastName: String!, $e
 `;
 
 export const ADD_TASK = gql`
-mutation addTask($taskText: String!) {
-    addTask(taskText: $taskText) {
+mutation addTask($taskText: String!, $priority: Boolean!) {
+    addTask(taskText: $taskText, priority: $priority) {
         _id
         taskText
         createdAt
         username
+        priority
     }
 }
 `;
+
+export const DELETE_TASK = gql`
+mutation deleteTask ( $_id: ID!) {
+    deleteTask(_id: $_id) {
+        _id
+    }
+}
+`

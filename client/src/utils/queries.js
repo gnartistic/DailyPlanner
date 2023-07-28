@@ -28,7 +28,7 @@ query user($username: String!) {
     _id
     username
     email
-    tasks {
+    Tasks {
         _id
         taskText
         createdAt

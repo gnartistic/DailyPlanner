@@ -20,14 +20,12 @@ const resolvers = {
         {
             return User.find()
                 .select( '-__v -password' )
-                .populate( 'tasks' )
-                .populate( 'friends' );
+                .populate( 'tasks' );
         },
         user: async ( parent, { username } ) =>
         {
             return User.findOne( { username } )
                 .select( '-__v -password' )
-                .populate( 'friends' )
                 .populate( 'tasks' );
         },
         tasks: async ( parent, { username } ) =>
@@ -82,7 +80,24 @@ const resolvers = {
 
             throw new AuthenticationError( 'You need to be logged in!' );
         },
-    }
-};
+        deleteTask: async ( parent, args, context ) =>
+        {
+            if( context.user ) {
+                const task = await Task.findById( { ...args, username: context.user.username } );
+                
+                await task.remove();
 
-module.exports = resolvers;
+                await User.findByIdAndUpdate(
+                    { _id: context.user._id },
+                    { $pull: { tasks: task._id } },
+                    { new: true }
+                );
+
+                return task
+                }
+            }
+        
+        }
+    };
+
+    module.exports = resolvers;
