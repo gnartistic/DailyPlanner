@@ -20,7 +20,11 @@ const taskSchema = new Schema(
         },
         priority: {
             type: Boolean,
-            required: true
+            default: false
+        },
+        isDone: {
+            type: Boolean,
+            default: false
         }
     },
     {

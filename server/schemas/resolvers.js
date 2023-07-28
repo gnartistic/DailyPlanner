@@ -84,7 +84,7 @@ const resolvers = {
         {
             if( context.user ) {
                 const task = await Task.findById( { ...args, username: context.user.username } );
-                
+
                 await task.remove();
 
                 await User.findByIdAndUpdate(
@@ -94,10 +94,55 @@ const resolvers = {
                 );
 
                 return task
-                }
             }
-        
-        }
-    };
+        },
+        updateTaskPriority: async ( parent, { _id, priority }, context ) =>
+        {
+            // if( !context.user ) {
+            //     throw new AuthenticationError( 'You need to be logged in!' );
+            // }
 
-    module.exports = resolvers;
+            const task = await Task.findById( _id );
+
+            // if( !task ) {
+            //     throw new Error( 'Task not found' );
+            // }
+
+            // // Check if the task belongs to the logged-in user
+            // if( task.username !== context.user.username ) {
+            //     throw new AuthenticationError( "You don't have permission to update this task" );
+            // }
+
+            // Update the priority field
+            task.priority = priority;
+
+            return await task.save();
+        },
+
+        updateTaskIsDone: async ( parent, { _id, isDone }, context ) =>
+        {
+            // if( !context.user ) {
+            //     throw new AuthenticationError( 'You need to be logged in!' );
+            // }
+
+            const task = await Task.findById( _id );
+
+            // if( !task ) {
+            //     throw new Error( 'Task not found' );
+            // }
+
+            // // Check if the task belongs to the logged-in user
+            // if( task.username !== context.user.username ) {
+            //     throw new AuthenticationError( "You don't have permission to update this task" );
+            // }
+
+            // Update the priority field
+            task.isDone = isDone;
+
+            return await task.save();
+        },
+
+    }
+};
+
+module.exports = resolvers;

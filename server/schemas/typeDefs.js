@@ -16,6 +16,7 @@ type Task {
     createdAt: String
     username: String
     priority: Boolean
+    isDone: Boolean
 }
 
 type Auth {
@@ -34,8 +35,10 @@ type Query {
 type Mutation {
     login(email: String!, password: String!): Auth
     addUser(username: String!, firstName: String!, lastName: String!, email: String!, password: String!): Auth
-    addTask(taskText: String!, priority: Boolean!): Task
+    addTask(taskText: String!): Task
     deleteTask(_id: ID!): Task
+    updateTaskPriority(_id: ID!, priority: Boolean!): Task
+    updateTaskIsDone(_id: ID!, isDone: Boolean!): Task
 }
 `;
 
