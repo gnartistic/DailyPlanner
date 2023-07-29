@@ -7,6 +7,8 @@ query tasks($username: String) {
     taskText
     createdAt
     username
+    priority
+    isDone
     }
 }
 `;
@@ -18,6 +20,8 @@ query task($id: ID!) {
     taskText
     createdAt
     username
+    priority
+    isDone
     }
 }
 `;
@@ -32,6 +36,8 @@ query user($username: String!) {
         _id
         taskText
         createdAt
+        priority
+        isDone
         }
     }
 }
@@ -41,9 +47,10 @@ export const QUERY_ME = gql`
 {
     me {
         _id
+        firstName
+        lastName
         username
         email
-        friendCount
         tasks {
             _id
             taskText

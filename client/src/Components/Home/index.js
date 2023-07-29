@@ -10,14 +10,14 @@ const Home = () =>
     <>
       <div className="container home-page">
         <div className="text-zone">
-          <h1>Focus<span className='bold'>List</span></h1>
+          <h1>Productive<span className='bold'>Mind</span></h1>
         </div>
         <div className='button-zone'>
           <Link to='/login'><button className='login'> Login</button></Link>
           <Link to='/signup'><button className='signup'>Signup</button></Link>
         </div>
       </div>
-      <Loader type="ball-scale-ripple-multiple" />
+      <Loader type="line-scale" style={{transform: 'scale(2)'}} />
     </>
   )
 }
