@@ -5,7 +5,7 @@ body {
   overflow: hidden;
   display: block;
   margin: 0;
-  font-family: 'Press Start 2p';
+  font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

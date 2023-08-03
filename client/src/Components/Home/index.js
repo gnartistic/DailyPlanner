@@ -2,6 +2,7 @@ import React from 'react'
 import './index.scss'
 import Loader from 'react-loaders';
 import { Link } from 'react-router-dom';
+import Brain from '../../assets/rainbow-brain.png'
 
 const Home = () =>
 {
@@ -10,6 +11,7 @@ const Home = () =>
     <>
       <div className="container home-page">
         <div className="text-zone">
+          <img src={Brain} alt='rainbow brain logo' className='brain' />
           <h1>Productive<span className='bold'>Mind</span></h1>
         </div>
         <div className='button-zone'>

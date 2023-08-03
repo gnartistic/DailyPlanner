@@ -14,7 +14,7 @@ import Layout from './Components/Layout';
 import Home from './Components/Home';
 import Login from './Components/Login';
 import Confirmation from './Components/Signup/Confirmation';
-import Main from './Components/Main'
+import Main from './Components/ToDoList'
 
 const httpLink = createHttpLink( {
   uri: 'http://localhost:3001/graphql',

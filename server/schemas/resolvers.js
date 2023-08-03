@@ -101,9 +101,6 @@ const resolvers = {
                 // Create a new task with the provided arguments and set its 'username' field to the username of the logged-in user
                 const task = await Task.create( { ...args, username: context.user.username } );
 
-                // Add the newly created task's ID to the 'tasks' array of the logged-in user
-                await User.findByIdAndUpdate( { _id: context.user._id }, { $push: { tasks: task._id } }, { new: true } );
-
                 // Return the newly created task
                 return task;
             }
