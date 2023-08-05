@@ -14,6 +14,7 @@
     "@fontsource/press-start-2p": "^4.5.11",
     "@fontsource/roboto": "^4.5.8",
     "@fontsource/roboto-slab": "^4.5.9",
+    "@fortawesome/fontawesome-free": "^6.4.2",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-brands-svg-icons": "^6.2.0",
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
@@ -57,5 +58,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "node-sass": "^7.0.3",
+    "sass-loader": "^13.3.2"
   }
 }

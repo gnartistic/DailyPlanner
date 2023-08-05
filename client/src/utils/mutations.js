@@ -48,3 +48,29 @@ mutation deleteTask($_id: ID!) {
         _id
     }
 }`;
+
+export const UPDATE_TASK_IS_DONE = gql`
+mutation updateTaskIsDone( $_id: ID!, $isDone: Boolean! ) {
+    updateTaskIsDone(_id: $_id, isDone: $isDone) {
+        _id
+        taskText
+        createdAt
+        username
+        priority
+        isDone
+    }
+}
+`
+
+export const UPDATE_TASK_IS_PRIORITY = gql`
+mutation updateTaskIsPriority( $_id: ID!, $isPriority: Boolean! ) {
+    updateTaskIsPriority(_id: $_id, isPriority: $isPriority) {
+        _id
+        taskText
+        createdAt
+        username
+        priority
+        isDone
+    }
+}
+`

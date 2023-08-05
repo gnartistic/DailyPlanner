@@ -11,7 +11,7 @@ import { validateEmail } from '../../utils/helpers';
 const Login = ( props ) =>
 {
   const [ formState, setFormState ] = useState( { email: '', password: '' } );
-  const [ login, { error } ] = useMutation( LOGIN_USER );
+  const [ login ] = useMutation( LOGIN_USER );
 
   const { email, password } = formState;
 
