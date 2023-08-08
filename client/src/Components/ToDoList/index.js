@@ -1,7 +1,7 @@
 // Import necessary components and libraries
 import React, { useState, useEffect, useMemo } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { ADD_TASK, DELETE_TASK, UPDATE_TASK_IS_DONE, UPDATE_TASK_IS_PRIORITY } from '../../utils/mutations';
+import { ADD_TASK, DELETE_TASK, UPDATE_TASK_IS_DONE } from '../../utils/mutations';
 import { QUERY_TASKS } from '../../utils/queries';
 import Auth from '../../utils/auth';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +18,6 @@ const ToDoList = () =>
     const [ tasks, setTasks ] = useState( [] );
     const [ completedTasksCount, setCompletedTasksCount ] = useState( 0 );
     const [ completedTasks, setCompletedTasks ] = useState( [] );
-    const [ priorityTasks, setPriorityTasks ] = useState( [] );
     const [ allTasksDeleted, setAllTasksDeleted ] = useState( false );
 
 
@@ -29,10 +28,9 @@ const ToDoList = () =>
     const loggedIn = Auth.loggedIn();
 
     // Fetch tasks using a GraphQL query
-    const { loading, data } = useQuery( QUERY_TASKS );
+    const { data } = useQuery( QUERY_TASKS );
 
     const [ updateTaskIsDone ] = useMutation( UPDATE_TASK_IS_DONE );
-    const [ updateTaskIsPriority ] = useMutation( UPDATE_TASK_IS_PRIORITY );
 
     // Extract tasks from the query result using memoization
     const tasksFromQuery = useMemo( () => data?.tasks || [], [ data ] );

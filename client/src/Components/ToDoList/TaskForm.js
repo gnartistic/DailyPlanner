@@ -1,5 +1,5 @@
 // Import React and useState from React library
-import React, { useState } from 'react';
+import React from 'react';
 
 // TaskForm component for entering task information
 const TaskForm = ( { addTask, characterCount, taskText, handleChange, handleFormSubmit } ) =>
