@@ -106,6 +106,8 @@ const ToDoList = () =>
             if( isDone ) {
                 setCompletedTasks( prevTasks => prevTasks.filter( task => task._id !== taskId ) );
                 setCompletedTasksCount( prevCount => prevCount - 1 ); // Decrement count
+
+            console.log( completedTasks );
             } else {
                 setCompletedTasks( prevTasks => [ ...prevTasks, taskId ] );
                 setCompletedTasksCount( prevCount => prevCount + 1 ); // Increment count
